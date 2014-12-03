@@ -21,13 +21,13 @@
 `define OPCODE_slt 6'b101010 // set less than
 `define OPCODE_bne 6'b000101 // branch not equal
 `define OPCODE_beq 6'b000100 // branch if equal
-`define OPCODE_jr 6'b001000 // jump . . . something? return?
+`define OPCODE_jr 6'b001000 // jump return. R TYPE
 `define OPCODE_sw 6'b101011 // Store word.
 `define OPCODE_lw 6'b100011 // Load word.
 
 
 
-module InstructionDecoder(instruction, RegDst, RegWr, ALUsrc, Branch, Jump, ALUcntrl, MemWr, MemToReg, TargetInstr, JumpReg, Imm16, RT, RS);
+module InstructionDecoder(instruction, ExtendMethod, RegDst, RegWr, ALUsrc, Branch, Jump, ALUcntrl, MemWr, MemToReg, JumpReg, InvZero);
 // Look up table that takes a 32 bit instruction word and sets all the neccissary control
 // flags to make the processor preform the correct computation.
 
@@ -37,58 +37,51 @@ input[31:0] instruction;
 // control flags. See all green labels in 'mp3processor.jpg' to see where the list
 // of neccissary control flags came from.
 output reg RegDst; // ?? somehow controls what location is written to the register file? I don't get this one.
+output reg ExtendMethod;
 output reg RegWr; // register write enable. determines if the output of the last calculation is written back to the register file or not.
-output reg ALUsrc; // ALU source. does our ALU preform its operation on a value from the reg file, an immediate, or on the program counter.
+output reg[1:0] ALUsrc; // ALU source. does our ALU preform its operation on a value from the reg file, an immediate, or on the program counter.
 output reg Branch; // are we branching? helps the instruction fetch unit know what to fetch next.
 output reg Jump; // are we jumping? helps the instruction unit know what to fetch next.
 output reg ALUcntrl; // ALU control. What operation should our ALU preform on the two inputs? (one input is always Da, the other is selected by ALUsrc)
 output reg MemWr; // Memory Write Enable. Do we write from the register file to the Data Memory?
 output reg MemToReg; // Memory to Register File. What source do we send back to the register file? Do we load from Data Memory, or return the output from the ALU.
 
-// the next two conrol flags are addi9tional control flags found in 'mp3if.jpg' (Instruction Fetch Unit)
-output reg[25:0] TargetInstr; // target instruction. If we jump, where are we jumping to?
+// the next control flags are addi9tional control flags found in 'mp3if.jpg' (Instruction Fetch Unit)
 output reg JumpReg; // Jump Register. Not sure what this one is for.
+output reg InvZero;
 
-// ??? Not sure if these are needed. they are drawn in black on the reference drawing 
-// (indicating that it is not an output from the Instruction Decoder), but the 
-// instruction decoder is the only part of the proccessor that gets access to the 
-// entire 32 bit instruction, so I would assume they need to get broken out.
-// UPDATE: slide deck #9 makes me more confident that these need to be here.
-output reg[15:0] Imm16;
-output reg[4:0] RT;
-output reg[4:0] RS;
 
 reg[5:0] op_code; // should get optimized away
 
 always @(instruction) begin
 op_code = instruction[31:26];
 case (op_code)
-	`OPCODE_addiu: begin RegDst = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; TargetInstr = 0; JumpReg = 0; Imm16 = 0; RT = 0; RS = 0; end
-	`OPCODE_jal: begin RegDst = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; TargetInstr = 0; JumpReg = 0; Imm16 = 0; RT = 0; RS = 0; end	
-	`OPCODE_addu: begin RegDst = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; TargetInstr = 0; JumpReg = 0; Imm16 = 0; RT = 0; RS = 0; end	
-	`OPCODE_add: begin RegDst = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; TargetInstr = 0; JumpReg = 0; Imm16 = 0; RT = 0; RS = 0; end	
-	`OPCODE_addi: begin RegDst = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; TargetInstr = 0; JumpReg = 0; Imm16 = 0; RT = 0; RS = 0; end	
-	`OPCODE_slt: begin RegDst = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; TargetInstr = 0; JumpReg = 0; Imm16 = 0; RT = 0; RS = 0; end	
-	`OPCODE_bne: begin RegDst = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; TargetInstr = 0; JumpReg = 0; Imm16 = 0; RT = 0; RS = 0; end	
-	`OPCODE_beq: begin RegDst = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; TargetInstr = 0; JumpReg = 0; Imm16 = 0; RT = 0; RS = 0; end	
-	`OPCODE_jr: begin RegDst = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; TargetInstr = 0; JumpReg = 0; Imm16 = 0; RT = 0; RS = 0; end	
-	`OPCODE_sw: begin RegDst = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; TargetInstr = 0; JumpReg = 0; Imm16 = 0; RT = 0; RS = 0; end	
-	`OPCODE_lw: begin RegDst = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; TargetInstr = 0; JumpReg = 0; Imm16 = 0; RT = 0; RS = 0; end	
+	`OPCODE_addiu: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
+		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end
+	`OPCODE_jal: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
+		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
+	`OPCODE_addu: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
+		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
+	`OPCODE_add: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
+		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
+	`OPCODE_addi: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
+		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
+	`OPCODE_slt: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
+		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
+	`OPCODE_bne: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
+		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
+	`OPCODE_beq: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
+		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
+	`OPCODE_jr: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
+		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
+	`OPCODE_sw: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
+		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
+	`OPCODE_lw: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
+		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
 	
 	
-	default: begin RegDst = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; TargetInstr = 0; JumpReg = 0; Imm16 = 0; RT = 0; RS = 0; end
+	default: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
+		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end
 	// helps make sure every case is represented, so that the synthesiser 
 	// can optimize away all the registers. (all outputs were declared as reg). 
 	// apparently the synthesiser can't get rid of them if one of my cases is incomplete.
@@ -100,20 +93,18 @@ endmodule
 module InstructionDecoderTestBench;
 reg[31:0] tester_instruction;
 wire tester_RegDst;
+wire tester_ExtendMethod;
 wire tester_RegWr;
-wire tester_ALUsrc;
+wire[1:0] tester_ALUsrc;
 wire tester_Branch;
 wire tester_Jump;
 wire tester_ALUcntrl;
 wire tester_MemWr;
 wire tester_MemToReg;
-wire[25:0] tester_TargetInstr;
 wire tester_JumpReg;
-wire[15:0] tester_Imm16;
-wire[4:0] tester_RT;
-wire[4:0] tester_RS;
+wire tester_InvZero;
 
-InstructionDecoder myDecoder(tester_instruction, tester_RegDst, tester_RegWr, tester_ALUsrc, tester_Branch, tester_Jump, tester_ALUcntrl, tester_MemWr, tester_MemToReg, tester_TargetInstr, tester_JumpReg, tester_Imm16, tester_RT, tester_RS);
+InstructionDecoder myDecoder(tester_instruction, tester_ExtendMethod, tester_RegDst, tester_RegWr, tester_ALUsrc, tester_Branch, tester_Jump, tester_ALUcntrl, tester_MemWr, tester_MemToReg, tester_JumpReg, tester_InvZero);
 
 
 initial begin
