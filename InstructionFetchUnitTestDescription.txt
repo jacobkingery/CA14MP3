@@ -1,0 +1,6 @@
+a. Run DoInstructionMemory.do, verify that the PC waveform matches the following sequence:
+   PC: 0, 1, 2, 0, 1, 9, 10, 1, 2, 2, 3, 4, 5, 9, 10, 14, 15
+
+b. The test tries out all the different ways the program counter can change. First it allows it to increment by one command at a time (the default behavior). It also does this in between each of the following. It does Jumps with two different immediates. Then it does JumpRegisters with two different values in the $ra register. Then it does Branches with all of the different arrangements of Zero and InvZero.
+
+c. This test could catch a design error where it Branches when the branch check evaluates to false. It also could catch off-by-one errors with the Jump, JumpRegister, and Branch operations.
