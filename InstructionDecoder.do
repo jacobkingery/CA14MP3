@@ -16,7 +16,9 @@ sim:/InstructionDecoderTestBench/tester_MemWr \
 sim:/InstructionDecoderTestBench/tester_MemToReg \
 sim:/InstructionDecoderTestBench/tester_TargetInstr \
 sim:/InstructionDecoderTestBench/tester_JumpReg \
-sim:/InstructionDecoderTestBench/tester_Imm16
+sim:/InstructionDecoderTestBench/tester_Imm16 \
+sim:/InstructionDecoderTestBench/tester_RT \
+sim:/InstructionDecoderTestBench/tester_RS
 
 run -all
 wave zoom full
