@@ -42,7 +42,7 @@ output reg RegWr; // register write enable. determines if the output of the last
 output reg[1:0] ALUsrc; // ALU source. does our ALU preform its operation on a value from the reg file, an immediate, or on the program counter.
 output reg Branch; // are we branching? helps the instruction fetch unit know what to fetch next.
 output reg Jump; // are we jumping? helps the instruction unit know what to fetch next.
-output reg ALUcntrl; // ALU control. What operation should our ALU preform on the two inputs? (one input is always Da, the other is selected by ALUsrc)
+output reg [2:0]ALUcntrl; // ALU control. What operation should our ALU preform on the two inputs? (one input is always Da, the other is selected by ALUsrc)
 output reg MemWr; // Memory Write Enable. Do we write from the register file to the Data Memory?
 output reg MemToReg; // Memory to Register File. What source do we send back to the register file? Do we load from Data Memory, or return the output from the ALU.
 
@@ -64,20 +64,20 @@ case (op_code)
 		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
 	`OPCODE_add: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
 		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
-	`OPCODE_addi: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
-	`OPCODE_slt: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
-	`OPCODE_bne: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
-	`OPCODE_beq: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
-	`OPCODE_jr: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
-	`OPCODE_sw: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
-	`OPCODE_lw: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
+	`OPCODE_addi: begin RegDst = `RT; ExtendMethod = 0; RegWr = 1; ALUsrc = `immediate; Branch = 0; Jump = 0; 
+		ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
+	`OPCODE_slt: begin RegDst = `RD; ExtendMethod = 0; RegWr = 0; ALUsrc = `Db; Branch = 0; Jump = 0; 
+		ALUcntrl = `SLT; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
+	`OPCODE_bne: begin RegDst = `RT; ExtendMethod = 0; RegWr = 0; ALUsrc = `immediate; Branch = 1; Jump = 0; 
+		ALUcntrl = `SUB; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 1; end	
+	`OPCODE_beq: begin RegDst = `RT; ExtendMethod = 0; RegWr = 0; ALUsrc = `immediate; Branch = 1; Jump = 0; 
+		ALUcntrl = `SUB; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
+	`OPCODE_jr: begin RegDst = `RD; ExtendMethod = 0; RegWr = 0; ALUsrc = `Db; Branch = 0; Jump = 0; 
+		ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 1; InvZero = 0; end	
+	`OPCODE_sw: begin RegDst = `RT; ExtendMethod = 0; RegWr = 0; ALUsrc = `immediate; Branch = 0; Jump = 0; 
+		ALUcntrl = `ADD; MemWr = 1; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
+	`OPCODE_lw: begin RegDst = `RT; ExtendMethod = 0; RegWr = 1; ALUsrc = `immediate; Branch = 0; Jump = 0; 
+		ALUcntrl = `ADD; MemWr = 0; MemToReg = 1; JumpReg = 0; InvZero = 0; end	
 	
 	
 	default: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
@@ -98,7 +98,7 @@ wire tester_RegWr;
 wire[1:0] tester_ALUsrc;
 wire tester_Branch;
 wire tester_Jump;
-wire tester_ALUcntrl;
+wire [2:0]tester_ALUcntrl;
 wire tester_MemWr;
 wire tester_MemToReg;
 wire tester_JumpReg;
