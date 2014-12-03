@@ -4,5 +4,5 @@ add wave -position insertpoint \
 sim:/testMemory/clk \
 sim:/testMemory/PC \
 sim:/testMemory/DataOut
-run 1000
+run 3200
 wave zoom full
