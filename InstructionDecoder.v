@@ -25,6 +25,16 @@
 `define OPCODE_sw 6'b101011 // Store word.
 `define OPCODE_lw 6'b100011 // Load word.
 
+`define RT 1'b0
+`define RD 1'b1
+
+`define Immediate 2'b00
+`define PC 2'b01
+`define Db 2'b10
+
+`define ADD 3'd0
+`define SUB 3'd1
+`define SLT 3'd3
 
 
 module InstructionDecoder(instruction, ExtendMethod, RegDst, RegWr, ALUsrc, Branch, Jump, ALUcntrl, MemWr, MemToReg, JumpReg, InvZero);
@@ -56,14 +66,14 @@ reg[5:0] op_code; // should get optimized away
 always @(instruction) begin
 op_code = instruction[31:26];
 case (op_code)
-	`OPCODE_addiu: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end
-	`OPCODE_jal: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
-	`OPCODE_addu: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
-	`OPCODE_add: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
+	`OPCODE_addiu: begin RegDst = `RT; ExtendMethod = 1; RegWr = 0; ALUsrc = `Immediate; Branch = 0; Jump = 0; 
+		ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end
+	`OPCODE_jal: begin RegDst = 0; ExtendMethod = 0; RegWr = 1; ALUsrc = `PC; Branch = 0; Jump = 1; 
+		ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
+	`OPCODE_addu: begin RegDst = `RD; ExtendMethod = 0; RegWr = 1; ALUsrc = `Db; Branch = 0; Jump = 0; 
+		ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
+	`OPCODE_add: begin RegDst = `RD; ExtendMethod = 0; RegWr = 1; ALUsrc = `Db; Branch = 0; Jump = 0; 
+		ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
 	`OPCODE_addi: begin RegDst = `RT; ExtendMethod = 0; RegWr = 1; ALUsrc = `immediate; Branch = 0; Jump = 0; 
 		ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
 	`OPCODE_slt: begin RegDst = `RD; ExtendMethod = 0; RegWr = 0; ALUsrc = `Db; Branch = 0; Jump = 0; 
