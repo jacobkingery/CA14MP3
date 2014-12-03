@@ -28,7 +28,7 @@
 `define RT 1'b0
 `define RD 1'b1
 
-`define Immediate 2'b00
+`define immediate 2'b00
 `define PC 2'b01
 `define Db 2'b10
 
@@ -66,7 +66,7 @@ reg[5:0] op_code; // should get optimized away
 always @(instruction) begin
 op_code = instruction[31:26];
 case (op_code)
-	`OPCODE_addiu: begin RegDst = `RT; ExtendMethod = 1; RegWr = 0; ALUsrc = `Immediate; Branch = 0; Jump = 0; 
+	`OPCODE_addiu: begin RegDst = `RT; ExtendMethod = 1; RegWr = 0; ALUsrc = `immediate; Branch = 0; Jump = 0; 
 		ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end
 	`OPCODE_jal: begin RegDst = 0; ExtendMethod = 0; RegWr = 1; ALUsrc = `PC; Branch = 0; Jump = 1; 
 		ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
