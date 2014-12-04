@@ -25,19 +25,23 @@
 `define OPCODE_sw 6'b101011 // Store word.
 `define OPCODE_lw 6'b100011 // Load word.
 
-`define RT 1'b0
-`define RD 1'b1
+`define RT 2'd0
+`define RD 2'd1
+`define RA 2'd2
 
 `define immediate 2'b00
 `define PC 2'b01
 `define Db 2'b10
+
+`define ALUout 1'b0
+`define ALUoutBuff 1'b1
 
 `define ADD 3'd0
 `define SUB 3'd1
 `define SLT 3'd3
 
 
-module InstructionDecoder(clk, instruction, ExtendMethod, RegDst, RegWr, ALUsrc, Branch, Jump, ALUcntrl, MemWr, MemToReg, JumpReg, InvZero);
+module InstructionDecoder(clk, instruction, ExtendMethod, RegDst, RegWr, ALUsrc, Branch, Jump, ALUcntrl, MemWr, MemToReg, DMAddrsrc, JumpReg, InvZero);
 // Look up table that takes a 32 bit instruction word and sets all the neccissary control
 // flags to make the processor preform the correct computation.
 input clk;
@@ -46,7 +50,7 @@ input[31:0] instruction;
 
 // control flags. See all green labels in 'mp3processor.jpg' to see where the list
 // of neccissary control flags came from.
-output reg RegDst; // ?? somehow controls what location is written to the register file? I don't get this one.
+output reg[1:0] RegDst; // ?? somehow controls what location is written to the register file? I don't get this one.
 output reg ExtendMethod;
 output reg RegWr; // register write enable. determines if the output of the last calculation is written back to the register file or not.
 output reg[1:0] ALUsrc; // ALU source. does our ALU preform its operation on a value from the reg file, an immediate, or on the program counter.
@@ -55,13 +59,13 @@ output reg Jump; // are we jumping? helps the instruction unit know what to fetc
 output reg [2:0]ALUcntrl; // ALU control. What operation should our ALU preform on the two inputs? (one input is always Da, the other is selected by ALUsrc)
 output reg MemWr; // Memory Write Enable. Do we write from the register file to the Data Memory?
 output reg MemToReg; // Memory to Register File. What source do we send back to the register file? Do we load from Data Memory, or return the output from the ALU.
+output reg DMAddrsrc;
 
 // the next control flags are addi9tional control flags found in 'mp3if.jpg' (Instruction Fetch Unit)
 output reg JumpReg; // Jump Register. Not sure what this one is for.
 output reg InvZero;
 
 
-// reg[5:0] op_code; // should get optimized away
 wire[5:0] op_code;
 assign op_code = instruction[31:26];
 
@@ -69,41 +73,40 @@ wire[5:0] funct = instruction[5:0];
 
 
 always @(instruction) begin
-  // op_code = instruction[31:26];
   case (op_code)
     0: begin
       case (funct)
         `OPCODE_addu: begin RegDst = `RD; ExtendMethod = 0; RegWr = 1; ALUsrc = `Db; Branch = 0; Jump = 0; 
-          ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end 
+          ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; DMAddrsrc = 0; JumpReg = 0; InvZero = 0; end 
         `OPCODE_add: begin RegDst = `RD; ExtendMethod = 0; RegWr = 1; ALUsrc = `Db; Branch = 0; Jump = 0; 
-          ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end 
+          ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; DMAddrsrc = 0; JumpReg = 0; InvZero = 0; end 
         `OPCODE_slt: begin RegDst = `RD; ExtendMethod = 0; RegWr = 0; ALUsrc = `Db; Branch = 0; Jump = 0; 
-          ALUcntrl = `SLT; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end 
+          ALUcntrl = `SLT; MemWr = 0; MemToReg = 0; DMAddrsrc = 0; JumpReg = 0; InvZero = 0; end 
         `OPCODE_jr: begin RegDst = `RD; ExtendMethod = 0; RegWr = 0; ALUsrc = `Db; Branch = 0; Jump = 0; 
-          ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 1; InvZero = 0; end 
+          ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; DMAddrsrc = 0; JumpReg = 1; InvZero = 0; end 
         
         default: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-        ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end
+        ALUcntrl = 0; MemWr = 0; MemToReg = 0; DMAddrsrc = 0; JumpReg = 0; InvZero = 0; end
       endcase
     end
-    `OPCODE_addiu: begin RegDst = `RT; ExtendMethod = 1; RegWr = 0; ALUsrc = `immediate; Branch = 0; Jump = 0; 
-      ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end
-    `OPCODE_jal: begin RegDst = 0; ExtendMethod = 0; RegWr = 1; ALUsrc = `PC; Branch = 0; Jump = 1; 
-      ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end 
+    `OPCODE_addiu: begin RegDst = `RT; ExtendMethod = 1; RegWr = 1; ALUsrc = `immediate; Branch = 0; Jump = 0; 
+      ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; DMAddrsrc = 0; JumpReg = 0; InvZero = 0; end
+    `OPCODE_jal: begin RegDst = `RA; ExtendMethod = 0; RegWr = 1; ALUsrc = `PC; Branch = 0; Jump = 1; 
+      ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; DMAddrsrc = 0; JumpReg = 0; InvZero = 0; end 
     `OPCODE_addi: begin RegDst = `RT; ExtendMethod = 0; RegWr = 1; ALUsrc = `immediate; Branch = 0; Jump = 0; 
-      ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end 
+      ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; DMAddrsrc = 0; JumpReg = 0; InvZero = 0; end 
     `OPCODE_bne: begin RegDst = `RT; ExtendMethod = 0; RegWr = 0; ALUsrc = `immediate; Branch = 1; Jump = 0; 
-      ALUcntrl = `SUB; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 1; end 
+      ALUcntrl = `SUB; MemWr = 0; MemToReg = 0; DMAddrsrc = 0; JumpReg = 0; InvZero = 1; end 
     `OPCODE_beq: begin RegDst = `RT; ExtendMethod = 0; RegWr = 0; ALUsrc = `immediate; Branch = 1; Jump = 0; 
-      ALUcntrl = `SUB; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end 
+      ALUcntrl = `SUB; MemWr = 0; MemToReg = 0; DMAddrsrc = 0; JumpReg = 0; InvZero = 0; end 
     `OPCODE_sw: begin RegDst = `RT; ExtendMethod = 0; RegWr = 0; ALUsrc = `immediate; Branch = 0; Jump = 0; 
-      ALUcntrl = `ADD; MemWr = 1; MemToReg = 0; JumpReg = 0; InvZero = 0; end 
+      ALUcntrl = `ADD; MemWr = 1; MemToReg = 0; DMAddrsrc = `ALUout; JumpReg = 0; InvZero = 0; end 
     `OPCODE_lw: begin RegDst = `RT; ExtendMethod = 0; RegWr = 1; ALUsrc = `immediate; Branch = 0; Jump = 0; 
-      ALUcntrl = `ADD; MemWr = 0; MemToReg = 1; JumpReg = 0; InvZero = 0; end 
+      ALUcntrl = `ADD; MemWr = 0; MemToReg = 1; DMAddrsrc = `ALUout; JumpReg = 0; InvZero = 0; end 
     
     
     default: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-      ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end
+      ALUcntrl = 0; MemWr = 0; MemToReg = 0; DMAddrsrc = 0; JumpReg = 0; InvZero = 0; end
     // helps make sure every case is represented, so that the synthesiser 
     // can optimize away all the registers. (all outputs were declared as reg). 
     // apparently the synthesiser can't get rid of them if one of my cases is incomplete.

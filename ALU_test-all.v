@@ -1,13 +1,13 @@
 // defining gates with improper delays
-`define NOTGATE not
-`define BUFGATE buf
+`define NOTGATE not 
+`define BUFGATE buf 
 `define NANDGATE nand
-`define NORGATE nor
-`define ANDGATE and
-`define ANDGATE4 and
-`define ORGATE or
-`define ORGATE5 or
-`define XORGATE xor
+`define NORGATE nor 
+`define ANDGATE and 
+`define ANDGATE4 and 
+`define ORGATE or 
+`define ORGATE5 or 
+`define XORGATE xor 
 
 // defining ALU commands as words
 `define ADD 3'd0
@@ -19,14 +19,16 @@
 `define NOR 3'd6
 `define OR 3'd7
 
-module ALUcontrolLUT(muxindex, invertB, invertOut, Cin, ALUcommand);
+module ALUcontrolLUT(muxindex, invertB, invertOut, Cin, ALUcommand, clk);
 // Behavioral LUT, mostly provided but configured with specific control flags
 output reg[2:0] muxindex;
 output reg invertB;
 output reg invertOut;
 output reg Cin;
 input[2:0] ALUcommand;
+input clk;
 always @(ALUcommand) begin
+// always @(negedge clk) begin
     case (ALUcommand)
     `ADD: begin muxindex = 0; invertB=0; invertOut = 0; Cin = 0; end 
     `SUB: begin muxindex = 0; invertB=1; invertOut = 0; Cin = 1; end
@@ -159,7 +161,7 @@ end
 endgenerate
 endmodule
 
-module ALU(result, carryout, zero, overflow, operandA, operandB, command);
+module ALU(result, carryout, zero, overflow, operandA, operandB, command, clk);
 output[31:0] result;
 output carryout;
 output zero;
@@ -167,13 +169,14 @@ output overflow;
 input[31:0] operandA;
 input[31:0] operandB;
 input[2:0] command;
+input clk;
 
 // Get control settings from LUT
 wire [2:0] addr;
 wire invB;
 wire invOut;
 wire Cin;
-ALUcontrolLUT controlLUT (addr, invB, invOut, Cin, command);
+ALUcontrolLUT controlLUT (addr, invB, invOut, Cin, command, clk);
 
 // Get output of each module for given settings
 wire tmp_ovfl;

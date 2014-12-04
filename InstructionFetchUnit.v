@@ -27,13 +27,13 @@ assign PCout = PC;
 
 InstructionMemory instrMem (clk, PC, Instruction);
 
-always @(posedge clk) begin
+always @(negedge clk) begin
   if (Jump) begin
     // jump to given target, assuming same first 4 bits
     PC <= {PC[29:26], TargetInstr};
   end else if (JumpReg) begin
-    // jump to the value in the jump return register, divided by 4
-    PC <= JumpTo[31:2];
+    // jump to the value in the jump return register, plus 1
+    PC <= JumpTo[29:0] + 1;
   end else begin
     if (Branch & (Zero ^ InvZero)) begin
       // sign extend immediate and add to PC (plus 1)

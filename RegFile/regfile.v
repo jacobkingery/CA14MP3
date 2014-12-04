@@ -15,6 +15,10 @@ input [4:0] WriteRegister;
 input RegWrite;
 input Clk;
 output[31:0] answer;
+wire[31:0] done;
+wire[31:0] a0;
+wire[31:0] sp;
+wire[31:0] ra;
 
 output [31:0] ReadData1;
 output [31:0] ReadData2;
@@ -96,4 +100,8 @@ mux32to1by32 first_muxer (ReadData1, ReadRegister1, mux_input0, mux_input1, mux_
 mux32to1by32 second_muxer (ReadData2, ReadRegister2, mux_input0, mux_input1, mux_input2, mux_input3, mux_input4, mux_input5, mux_input6, mux_input7, mux_input8, mux_input9, mux_input10, mux_input11, mux_input12, mux_input13, mux_input14, mux_input15, mux_input16, mux_input17, mux_input18, mux_input19, mux_input20, mux_input21, mux_input22, mux_input23, mux_input24, mux_input25, mux_input26, mux_input27, mux_input28, mux_input29, mux_input30, mux_input31);
 
 assign answer = mux_input3;
+assign done = mux_input8;
+assign a0 = mux_input4;
+assign sp = mux_input29;
+assign ra = mux_input31;
 endmodule
