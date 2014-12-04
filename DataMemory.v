@@ -4,7 +4,7 @@ module DataMemory(clk, regWE, Addr, DataIn, DataOut);
   input[31:0] DataIn;
   output[31:0] DataOut;
 
-  wire[31:0] OffsetAddr;
+  wire[9:0] OffsetAddr;
   assign OffsetAddr = 1023 - (32'h3ffc - Addr)/4;
  
   reg [31:0] mem[1023:0]; 

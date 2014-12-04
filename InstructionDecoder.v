@@ -68,7 +68,7 @@ assign op_code = instruction[31:26];
 wire[5:0] funct = instruction[5:0];
 
 
-always @(instruction) begin
+always @(instruction,op_code, funct) begin
   case (op_code)
     0: begin
       case (funct)

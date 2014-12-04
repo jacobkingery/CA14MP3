@@ -1,16 +1,14 @@
 module InstructionMemory(clk, Addr, DataOut);
   input clk;
   input[29:0] Addr;
-  output reg[31:0] DataOut;
-  // output[31:0] DataOut;
+  output[31:0] DataOut;
  
-  reg [31:0] mem[1023:0];
-  initial $readmemh("program_hex.dat", mem);
-
-  // assign DataOut = mem[Addr];
-  always @(posedge clk) begin
-    DataOut <= mem[Addr];
+  reg [31:0] mem[37:0];
+  initial begin 
+  $readmemh("program_hex.dat", mem);
   end
+
+  assign DataOut = mem[Addr];
 endmodule
 
 module IFU(clk, Jump, TargetInstr, JumpReg, JumpTo, Branch, imm16, Zero, InvZero, PCout, Instruction);
@@ -23,30 +21,34 @@ output[29:0] PCout;
 output[31:0] Instruction;
 
 reg[29:0] PC;
+reg[29:0] newPC;
 initial PC=0;
+initial newPC=0;
 
 assign PCout = PC;
 
 InstructionMemory instrMem (clk, PC, Instruction);
 
-wire Z;
-assign Z = (Zero ^ InvZero);
-always @(negedge clk) begin
+always @(posedge clk) begin
+  PC <= newPC;
+end
+
+always @(Jump, PC, TargetInstr, JumpReg, JumpTo, Branch, Zero, InvZero, imm16) begin
   if (Jump) begin
     // jump to given target, assuming same first 4 bits
-    PC <= {PC[29:26], TargetInstr};
+    newPC <= {PC[29:26], TargetInstr};
   end else if (JumpReg) begin
     // jump to the value in the jump return register, plus 1
-    PC <= JumpTo[29:0] + 1;
+    newPC <= JumpTo[29:0] + 1;
   end else begin
     if (Branch & (Zero ^ InvZero)) begin
       // sign extend immediate and add to PC (plus 1)
-      PC <= PC + {{14{imm16[15]}}, imm16} + 1;
+      newPC <= PC + {{14{imm16[15]}}, imm16} + 1;
     end else begin
       // increment PC
-      PC <= PC + 1;
+      newPC <= PC + 1;
     end
-  end
+  end 
 end
 endmodule
 

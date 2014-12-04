@@ -9,17 +9,6 @@ sim:/testCPU/CPU/PC \
 sim:/testCPU/CPU/Instruction \
 sim:/testCPU/CPU/answer \
 sim:/testCPU/CPU/RegFile/done \
-sim:/testCPU/CPU/RegFile/sp \
-sim:/testCPU/CPU/RegFile/a0 \
-sim:/testCPU/CPU/ALUout \
-sim:/testCPU/CPU/Da \
-sim:/testCPU/CPU/ALUopB \
-sim:/testCPU/CPU/ALUzero \
-sim:/testCPU/CPU/DataMem/mem1 \
-sim:/testCPU/CPU/DataMem/mem2 \
-sim:/testCPU/CPU/DataMem/mem3 \
-sim:/testCPU/CPU/DataMem/mem4 \
-sim:/testCPU/CPU/DataMem/mem5 \
-sim:/testCPU/CPU/DataMem/mem6
+sim:/testCPU/CPU/RegFile/sp 
 run 550000
 wave zoom full

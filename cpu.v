@@ -1,5 +1,6 @@
-module CPU(clk); 
+module CPU(clk, ALUoutput); 
   input clk;
+  output[31:0] ALUoutput;
 
   // Answer
   wire[31:0] answer;
@@ -34,9 +35,6 @@ module CPU(clk);
   wire[31:0] Da, Db;
   wire[31:0] Dout;
 
-  // Lag buffers
-  reg[31:0] PCBuff;
-
   // Instruction breakdown
   assign rs = Instruction[25:21];
   assign rt = Instruction[20:16];
@@ -50,7 +48,7 @@ module CPU(clk);
   Mux2to1 immExtenderMux (imm32, ExtendMethod, imm32sign, imm32zero);
 
   // ALU sourceB
-  Mux3to1 ALUsrcBMux (ALUopB, ALUsrc, imm32, PCBuff, Db);
+  Mux3to1 ALUsrcBMux (ALUopB, ALUsrc, imm32, PC32, Db);
 
   // Register file write address
   Mux3to1 #(5) AwMux (Aw, RegDst, rt, rd, 5'd31);
@@ -65,10 +63,7 @@ module CPU(clk);
   IFU IFU (clk, Jump, TargetInstr, JumpReg, ALUout, Branch, imm16, ALUzero, InvZero, PC, Instruction);
   InstructionDecoder InstrDec (clk, Instruction, ExtendMethod, RegDst, RegWr, ALUsrc, Branch, Jump, ALUcntrl, MemWr, MemToReg, JumpReg, InvZero);
 
-  always @(posedge clk) begin
-    PCBuff <= PC32;
-  end
-
+  assign ALUoutput = ALUout;
 endmodule
 
 module testCPU;
@@ -77,6 +72,8 @@ module testCPU;
   initial clk=1;
   always #100 clk = !clk;
 
-  CPU CPU (clk);
+  wire[31:0] ALUoutput;
+
+  CPU CPU (clk, ALUoutput);
 
 endmodule

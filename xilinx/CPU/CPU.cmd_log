@@ -1,0 +1,2 @@
+xst -intstyle ise -ifn "/home/jkingery/.wine/drive_c/CompArch/MP3/xilinx/CPU/CPU.xst" -ofn "/home/jkingery/.wine/drive_c/CompArch/MP3/xilinx/CPU/CPU.syr" 
+xst -intstyle ise -ifn "/home/jkingery/.wine/drive_c/CompArch/MP3/xilinx/CPU/CPU.xst" -ofn "/home/jkingery/.wine/drive_c/CompArch/MP3/xilinx/CPU/CPU.syr" 

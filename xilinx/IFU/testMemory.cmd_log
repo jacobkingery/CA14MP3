@@ -1,0 +1,1 @@
+xst -intstyle ise -ifn "/home/jkingery/.wine/drive_c/CompArch/MP3/xilinx/IFU/testMemory.xst" -ofn "/home/jkingery/.wine/drive_c/CompArch/MP3/xilinx/IFU/testMemory.syr" 

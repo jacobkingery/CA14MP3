@@ -1,0 +1,421 @@
+Release 14.7 - xst P.20131013 (lin64)
+Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved.
+--> 
+Parameter TMPDIR set to xst/projnav.tmp
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.03 secs
+ 
+--> 
+Parameter xsthdpdir set to xst
+
+
+Total REAL time to Xst completion: 0.00 secs
+Total CPU time to Xst completion: 0.03 secs
+ 
+--> 
+Reading design: DataMemory.prj
+
+TABLE OF CONTENTS
+  1) Synthesis Options Summary
+  2) HDL Compilation
+  3) Design Hierarchy Analysis
+  4) HDL Analysis
+  5) HDL Synthesis
+     5.1) HDL Synthesis Report
+  6) Advanced HDL Synthesis
+     6.1) Advanced HDL Synthesis Report
+  7) Low Level Synthesis
+  8) Partition Report
+  9) Final Report
+	9.1) Device utilization summary
+	9.2) Partition Resource Summary
+	9.3) TIMING REPORT
+
+
+=========================================================================
+*                      Synthesis Options Summary                        *
+=========================================================================
+---- Source Parameters
+Input File Name                    : "DataMemory.prj"
+Input Format                       : mixed
+Ignore Synthesis Constraint File   : NO
+
+---- Target Parameters
+Output File Name                   : "DataMemory"
+Output Format                      : NGC
+Target Device                      : xc3s1000-5-ft256
+
+---- Source Options
+Top Module Name                    : DataMemory
+Automatic FSM Extraction           : YES
+FSM Encoding Algorithm             : Auto
+Safe Implementation                : No
+FSM Style                          : LUT
+RAM Extraction                     : Yes
+RAM Style                          : Auto
+ROM Extraction                     : Yes
+Mux Style                          : Auto
+Decoder Extraction                 : YES
+Priority Encoder Extraction        : Yes
+Shift Register Extraction          : YES
+Logical Shifter Extraction         : YES
+XOR Collapsing                     : YES
+ROM Style                          : Auto
+Mux Extraction                     : Yes
+Resource Sharing                   : YES
+Asynchronous To Synchronous        : NO
+Multiplier Style                   : Auto
+Automatic Register Balancing       : No
+
+---- Target Options
+Add IO Buffers                     : YES
+Global Maximum Fanout              : 500
+Add Generic Clock Buffer(BUFG)     : 8
+Register Duplication               : YES
+Slice Packing                      : YES
+Optimize Instantiated Primitives   : NO
+Use Clock Enable                   : Yes
+Use Synchronous Set                : Yes
+Use Synchronous Reset              : Yes
+Pack IO Registers into IOBs        : Auto
+Equivalent register Removal        : YES
+
+---- General Options
+Optimization Goal                  : Speed
+Optimization Effort                : 1
+Keep Hierarchy                     : No
+Netlist Hierarchy                  : As_Optimized
+RTL Output                         : Yes
+Global Optimization                : AllClockNets
+Read Cores                         : YES
+Write Timing Constraints           : NO
+Cross Clock Analysis               : NO
+Hierarchy Separator                : /
+Bus Delimiter                      : <>
+Case Specifier                     : Maintain
+Slice Utilization Ratio            : 100
+BRAM Utilization Ratio             : 100
+Verilog 2001                       : YES
+Auto BRAM Packing                  : NO
+Slice Utilization Ratio Delta      : 5
+
+=========================================================================
+
+
+=========================================================================
+*                          HDL Compilation                              *
+=========================================================================
+Compiling verilog file "../../DataMemory.v" in library work
+Module <DataMemory> compiled
+No errors in compilation
+Analysis of file <"DataMemory.prj"> succeeded.
+ 
+
+=========================================================================
+*                     Design Hierarchy Analysis                         *
+=========================================================================
+Analyzing hierarchy for module <DataMemory> in library <work>.
+
+
+=========================================================================
+*                            HDL Analysis                               *
+=========================================================================
+Analyzing top module <DataMemory>.
+INFO:Xst:1607 - Contents of array <mem> may be accessed with an index that does not cover the full array size.
+INFO:Xst:1607 - Contents of array <mem> may be accessed with an index that does not cover the full array size.
+Module <DataMemory> is correct for synthesis.
+ 
+
+=========================================================================
+*                           HDL Synthesis                               *
+=========================================================================
+
+Performing bidirectional port resolution...
+
+Synthesizing Unit <DataMemory>.
+    Related source file is "../../DataMemory.v".
+WARNING:Xst:646 - Signal <mem6> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <mem5> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <mem4> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <mem3> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <mem2> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <mem1> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <mem0> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+WARNING:Xst:646 - Signal <OffsetAddr<31:10>> is assigned but never used. This unconnected signal will be trimmed during the optimization process.
+    Found 1024x32-bit single-port RAM <Mram_mem> for signal <mem>.
+    Found 32-bit adder for signal <OffsetAddr>.
+    Found 32-bit adder for signal <OffsetAddr$sub0000> created at line 9.
+    Summary:
+	inferred   1 RAM(s).
+	inferred   2 Adder/Subtractor(s).
+Unit <DataMemory> synthesized.
+
+
+=========================================================================
+HDL Synthesis Report
+
+Macro Statistics
+# RAMs                                                 : 1
+ 1024x32-bit single-port RAM                           : 1
+# Adders/Subtractors                                   : 2
+ 32-bit adder                                          : 2
+
+=========================================================================
+
+=========================================================================
+*                       Advanced HDL Synthesis                          *
+=========================================================================
+
+
+Synthesizing (advanced) Unit <DataMemory>.
+INFO:Xst:3218 - HDL ADVISOR - The RAM <Mram_mem> will be implemented on LUTs either because you have described an asynchronous read or because of currently unsupported block RAM features. If you have described an asynchronous read, making it synchronous would allow you to take advantage of available block RAM resources, for optimized device usage and improved timings. Please refer to your documentation for coding guidelines.
+    -----------------------------------------------------------------------
+    | ram_type           | Distributed                         |          |
+    -----------------------------------------------------------------------
+    | Port A                                                              |
+    |     aspect ratio   | 1024-word x 32-bit                  |          |
+    |     clkA           | connected to signal <clk>           | rise     |
+    |     weA            | connected to signal <regWE>         | high     |
+    |     addrA          | connected to signal <OffsetAddr>    |          |
+    |     diA            | connected to signal <DataIn>        |          |
+    |     doA            | connected to signal <DataOut>       |          |
+    -----------------------------------------------------------------------
+Unit <DataMemory> synthesized (advanced).
+
+=========================================================================
+Advanced HDL Synthesis Report
+
+Macro Statistics
+# RAMs                                                 : 1
+ 1024x32-bit single-port distributed RAM               : 1
+# Adders/Subtractors                                   : 2
+ 10-bit adder                                          : 1
+ 12-bit adder                                          : 1
+
+=========================================================================
+
+=========================================================================
+*                         Low Level Synthesis                           *
+=========================================================================
+
+Optimizing unit <DataMemory> ...
+
+Mapping all equations...
+Building and optimizing final netlist ...
+Found area constraint ratio of 100 (+ 5) on block DataMemory, actual ratio is 17.
+
+Final Macro Processing ...
+
+=========================================================================
+Final Register Report
+
+Found no macro
+=========================================================================
+
+=========================================================================
+*                           Partition Report                            *
+=========================================================================
+
+Partition Implementation Status
+-------------------------------
+
+  No Partitions were found in this design.
+
+-------------------------------
+
+=========================================================================
+*                            Final Report                               *
+=========================================================================
+Final Results
+RTL Top Level Output File Name     : DataMemory.ngr
+Top Level Output File Name         : DataMemory
+Output Format                      : NGC
+Optimization Goal                  : Speed
+Keep Hierarchy                     : No
+
+Design Statistics
+# IOs                              : 98
+
+Cell Usage :
+# BELS                             : 1138
+#      BUF                         : 1
+#      GND                         : 1
+#      INV                         : 44
+#      LUT1                        : 10
+#      LUT2                        : 4
+#      LUT3                        : 512
+#      LUT4                        : 32
+#      MUXCY                       : 11
+#      MUXF5                       : 288
+#      MUXF6                       : 128
+#      MUXF7                       : 64
+#      MUXF8                       : 32
+#      VCC                         : 1
+#      XORCY                       : 10
+# RAMS                             : 1024
+#      RAM32X1S                    : 1024
+# Clock Buffers                    : 1
+#      BUFGP                       : 1
+# IO Buffers                       : 77
+#      IBUF                        : 45
+#      OBUF                        : 32
+=========================================================================
+
+Device utilization summary:
+---------------------------
+
+Selected Device : 3s1000ft256-5 
+
+ Number of Slices:                     1320  out of   7680    17%  
+ Number of 4 input LUTs:               2650  out of  15360    17%  
+    Number used as logic:               602
+    Number used as RAMs:               2048
+ Number of IOs:                          98
+ Number of bonded IOBs:                  78  out of    173    45%  
+ Number of GCLKs:                         1  out of      8    12%  
+
+---------------------------
+Partition Resource Summary:
+---------------------------
+
+  No Partitions were found in this design.
+
+---------------------------
+
+
+=========================================================================
+TIMING REPORT
+
+NOTE: THESE TIMING NUMBERS ARE ONLY A SYNTHESIS ESTIMATE.
+      FOR ACCURATE TIMING INFORMATION PLEASE REFER TO THE TRACE REPORT
+      GENERATED AFTER PLACE-and-ROUTE.
+
+Clock Information:
+------------------
+-----------------------------------+------------------------+-------+
+Clock Signal                       | Clock buffer(FF name)  | Load  |
+-----------------------------------+------------------------+-------+
+clk                                | BUFGP                  | 1024  |
+-----------------------------------+------------------------+-------+
+
+Asynchronous Control Signals Information:
+----------------------------------------
+No asynchronous control signals found in this design
+
+Timing Summary:
+---------------
+Speed Grade: -5
+
+   Minimum period: No path found
+   Minimum input arrival time before clock: 11.079ns
+   Maximum output required time after clock: 9.994ns
+   Maximum combinational path delay: 17.608ns
+
+Timing Detail:
+--------------
+All values displayed in nanoseconds (ns)
+
+=========================================================================
+Timing constraint: Default OFFSET IN BEFORE for Clock 'clk'
+  Total number of paths / destination ports: 78848 / 7168
+-------------------------------------------------------------------------
+Offset:              11.079ns (Levels of Logic = 13)
+  Source:            Addr<0> (PAD)
+  Destination:       Mram_mem2 (RAM)
+  Destination Clock: clk rising
+
+  Data Path: Addr<0> to Mram_mem2
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O             1   0.715   0.976  Addr_0_IBUF (Addr_0_IBUF)
+     LUT1:I0->O            1   0.479   0.000  Madd_OffsetAddr_sub0000_Madd_cy<0>_rt (Madd_OffsetAddr_sub0000_Madd_cy<0>_rt)
+     MUXCY:S->O            1   0.435   0.000  Madd_OffsetAddr_sub0000_Madd_cy<0> (Madd_OffsetAddr_sub0000_Madd_cy<0>)
+     MUXCY:CI->O           1   0.056   0.000  Madd_OffsetAddr_sub0000_Madd_cy<1> (Madd_OffsetAddr_sub0000_Madd_cy<1>)
+     MUXCY:CI->O           1   0.056   0.000  Madd_OffsetAddr_sub0000_Madd_cy<2> (Madd_OffsetAddr_sub0000_Madd_cy<2>)
+     MUXCY:CI->O           1   0.056   0.000  Madd_OffsetAddr_sub0000_Madd_cy<3> (Madd_OffsetAddr_sub0000_Madd_cy<3>)
+     MUXCY:CI->O           1   0.056   0.000  Madd_OffsetAddr_sub0000_Madd_cy<4> (Madd_OffsetAddr_sub0000_Madd_cy<4>)
+     MUXCY:CI->O           1   0.056   0.000  Madd_OffsetAddr_sub0000_Madd_cy<5> (Madd_OffsetAddr_sub0000_Madd_cy<5>)
+     MUXCY:CI->O           1   0.056   0.000  Madd_OffsetAddr_sub0000_Madd_cy<6> (Madd_OffsetAddr_sub0000_Madd_cy<6>)
+     XORCY:CI->O         258   0.786   2.971  Madd_OffsetAddr_sub0000_Madd_xor<7> (OffsetAddr_sub0000<7>)
+     LUT2:I0->O            8   0.479   1.216  inst_LPM_DECODE1101 (N91)
+     LUT4:I0->O            1   0.479   0.000  write_ctrl110 (write_ctrl110)
+     MUXF5:I1->O          32   0.314   1.575  write_ctrl1_f5 (write_ctrl1)
+     RAM32X1S:WE               0.322          Mram_mem2
+    ----------------------------------------
+    Total                     11.079ns (4.342ns logic, 6.737ns route)
+                                       (39.2% logic, 60.8% route)
+
+=========================================================================
+Timing constraint: Default OFFSET OUT AFTER for Clock 'clk'
+  Total number of paths / destination ports: 1024 / 32
+-------------------------------------------------------------------------
+Offset:              9.994ns (Levels of Logic = 6)
+  Source:            Mram_mem994 (RAM)
+  Destination:       DataOut<31> (PAD)
+  Source Clock:      clk rising
+
+  Data Path: Mram_mem994 to DataOut<31>
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     RAM32X1S:WCLK->O      1   1.866   0.851  Mram_mem994 (N2020)
+     LUT3:I1->O            1   0.479   0.000  inst_LPM_MUX31_10 (inst_LPM_MUX31_10)
+     MUXF5:I0->O           1   0.314   0.000  inst_LPM_MUX31_8_f5 (inst_LPM_MUX31_8_f5)
+     MUXF6:I0->O           1   0.298   0.000  inst_LPM_MUX31_6_f6 (inst_LPM_MUX31_6_f6)
+     MUXF7:I0->O           1   0.298   0.000  inst_LPM_MUX31_4_f7 (inst_LPM_MUX31_4_f7)
+     MUXF8:I0->O           1   0.298   0.681  inst_LPM_MUX31_2_f8 (DataOut_31_OBUF)
+     OBUF:I->O                 4.909          DataOut_31_OBUF (DataOut<31>)
+    ----------------------------------------
+    Total                      9.994ns (8.462ns logic, 1.532ns route)
+                                       (84.7% logic, 15.3% route)
+
+=========================================================================
+Timing constraint: Default path analysis
+  Total number of paths / destination ports: 34368 / 32
+-------------------------------------------------------------------------
+Delay:               17.608ns (Levels of Logic = 16)
+  Source:            Addr<0> (PAD)
+  Destination:       DataOut<31> (PAD)
+
+  Data Path: Addr<0> to DataOut<31>
+                                Gate     Net
+    Cell:in->out      fanout   Delay   Delay  Logical Name (Net Name)
+    ----------------------------------------  ------------
+     IBUF:I->O             1   0.715   0.976  Addr_0_IBUF (Addr_0_IBUF)
+     LUT1:I0->O            1   0.479   0.000  Madd_OffsetAddr_sub0000_Madd_cy<0>_rt (Madd_OffsetAddr_sub0000_Madd_cy<0>_rt)
+     MUXCY:S->O            1   0.435   0.000  Madd_OffsetAddr_sub0000_Madd_cy<0> (Madd_OffsetAddr_sub0000_Madd_cy<0>)
+     MUXCY:CI->O           1   0.056   0.000  Madd_OffsetAddr_sub0000_Madd_cy<1> (Madd_OffsetAddr_sub0000_Madd_cy<1>)
+     MUXCY:CI->O           1   0.056   0.000  Madd_OffsetAddr_sub0000_Madd_cy<2> (Madd_OffsetAddr_sub0000_Madd_cy<2>)
+     MUXCY:CI->O           1   0.056   0.000  Madd_OffsetAddr_sub0000_Madd_cy<3> (Madd_OffsetAddr_sub0000_Madd_cy<3>)
+     MUXCY:CI->O           1   0.056   0.000  Madd_OffsetAddr_sub0000_Madd_cy<4> (Madd_OffsetAddr_sub0000_Madd_cy<4>)
+     XORCY:CI->O           9   0.786   0.955  Madd_OffsetAddr_sub0000_Madd_xor<5> (OffsetAddr_sub0000<5>)
+     INV:I->O            456   0.479   3.640  OffsetAddr_not0001<3>1_INV_0 (OffsetAddr_not0001<3>)
+     RAM32X1S:A3->O        1   0.793   0.851  Mram_mem912 (N1856)
+     LUT3:I1->O            1   0.479   0.000  inst_LPM_MUX28_73 (inst_LPM_MUX28_73)
+     MUXF5:I1->O           1   0.314   0.000  inst_LPM_MUX28_6_f5_1 (inst_LPM_MUX28_6_f52)
+     MUXF6:I1->O           1   0.298   0.000  inst_LPM_MUX28_5_f6_0 (inst_LPM_MUX28_5_f61)
+     MUXF7:I1->O           1   0.298   0.000  inst_LPM_MUX28_4_f7 (inst_LPM_MUX28_4_f7)
+     MUXF8:I0->O           1   0.298   0.681  inst_LPM_MUX28_2_f8 (DataOut_28_OBUF)
+     OBUF:I->O                 4.909          DataOut_28_OBUF (DataOut<28>)
+    ----------------------------------------
+    Total                     17.608ns (10.505ns logic, 7.103ns route)
+                                       (59.7% logic, 40.3% route)
+
+=========================================================================
+
+
+Total REAL time to Xst completion: 11.00 secs
+Total CPU time to Xst completion: 11.06 secs
+ 
+--> 
+
+
+Total memory usage is 546800 kilobytes
+
+Number of errors   :    0 (   0 filtered)
+Number of warnings :    8 (   0 filtered)
+Number of infos    :    3 (   0 filtered)
+

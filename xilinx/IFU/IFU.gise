@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<generated_project xmlns="http://www.xilinx.com/XMLSchema" xmlns:xil_pn="http://www.xilinx.com/XMLSchema">
+
+  <!--                                                          -->
+
+  <!--             For tool use only. Do not edit.              -->
+
+  <!--                                                          -->
+
+  <!-- ProjectNavigator created generated project file.         -->
+
+  <!-- For use in tracking generated file and other information -->
+
+  <!-- allowing preservation of process status.                 -->
+
+  <!--                                                          -->
+
+  <!-- Copyright (c) 1995-2013 Xilinx, Inc.  All rights reserved. -->
+
+  <version xmlns="http://www.xilinx.com/XMLSchema">11.1</version>
+
+  <sourceproject xmlns="http://www.xilinx.com/XMLSchema" xil_pn:fileType="FILE_XISE" xil_pn:name="IFU.xise"/>
+
+  <files xmlns="http://www.xilinx.com/XMLSchema">
+    <file xil_pn:fileType="FILE_XMSGS" xil_pn:name="_xmsgs/xst.xmsgs"/>
+    <file xil_pn:fileType="FILE_CMD_LOG" xil_pn:name="memory.cmd_log"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_LSO" xil_pn:name="memory.lso"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NGC" xil_pn:name="memory.ngc"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_NGR" xil_pn:name="memory.ngr"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="memory.prj"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_STX" xil_pn:name="memory.stx"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST_REPORT" xil_pn:name="memory.syr"/>
+    <file xil_pn:branch="Implementation" xil_pn:fileType="FILE_XST" xil_pn:name="memory.xst"/>
+    <file xil_pn:fileType="FILE_HTML" xil_pn:name="memory_envsettings.html"/>
+    <file xil_pn:fileType="FILE_HTML" xil_pn:name="memory_summary.html"/>
+    <file xil_pn:fileType="FILE_XRPT" xil_pn:name="memory_xst.xrpt"/>
+    <file xil_pn:fileType="FILE_CMD_LOG" xil_pn:name="testMemory.cmd_log"/>
+    <file xil_pn:fileType="FILE_LSO" xil_pn:name="testMemory.lso"/>
+    <file xil_pn:fileType="FILE_XST_PROJECT" xil_pn:name="testMemory.prj"/>
+    <file xil_pn:fileType="FILE_XST_REPORT" xil_pn:name="testMemory.syr"/>
+    <file xil_pn:fileType="FILE_XST" xil_pn:name="testMemory.xst"/>
+    <file xil_pn:fileType="FILE_HTML" xil_pn:name="testMemory_summary.html"/>
+    <file xil_pn:fileType="FILE_XRPT" xil_pn:name="testMemory_xst.xrpt"/>
+    <file xil_pn:fileType="FILE_FITTER_REPORT" xil_pn:name="webtalk_pn.xml"/>
+    <file xil_pn:fileType="FILE_DIRECTORY" xil_pn:name="xst"/>
+  </files>
+
+  <transforms xmlns="http://www.xilinx.com/XMLSchema">
+    <transform xil_pn:end_ts="1417642469" xil_pn:name="TRAN_copyInitialToXSTAbstractSynthesis" xil_pn:start_ts="1417642469">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1417647500" xil_pn:name="TRAN_schematicsToHdl" xil_pn:prop_ck="3477953000000074024" xil_pn:start_ts="1417647500">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1417647500" xil_pn:name="TRAN_regenerateCores" xil_pn:prop_ck="3809424432754017264" xil_pn:start_ts="1417647500">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1417642469" xil_pn:name="TRAN_SubProjectAbstractToPreProxy" xil_pn:start_ts="1417642469">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1417647500" xil_pn:name="TRAN_xawsTohdl" xil_pn:prop_ck="3817063005373226096" xil_pn:start_ts="1417647500">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1417642469" xil_pn:name="TRAN_SubProjectPreToStructuralProxy" xil_pn:prop_ck="-7493580321282947067" xil_pn:start_ts="1417642469">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1417647500" xil_pn:name="TRAN_platgen" xil_pn:prop_ck="-3855747563644949190" xil_pn:start_ts="1417647500">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+    </transform>
+    <transform xil_pn:end_ts="1417648593" xil_pn:in_ck="-6953386769603231105" xil_pn:name="TRANEXT_xstsynthesize_spartan3" xil_pn:prop_ck="7136051673961146276" xil_pn:start_ts="1417648557">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="WarningsGenerated"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForInputs"/>
+      <status xil_pn:value="InputChanged"/>
+      <outfile xil_pn:name="_xmsgs/xst.xmsgs"/>
+      <outfile xil_pn:name="memory.lso"/>
+      <outfile xil_pn:name="memory.ngc"/>
+      <outfile xil_pn:name="memory.ngr"/>
+      <outfile xil_pn:name="memory.prj"/>
+      <outfile xil_pn:name="memory.stx"/>
+      <outfile xil_pn:name="memory.syr"/>
+      <outfile xil_pn:name="memory.xst"/>
+      <outfile xil_pn:name="memory_xst.xrpt"/>
+      <outfile xil_pn:name="webtalk_pn.xml"/>
+      <outfile xil_pn:name="xst"/>
+    </transform>
+    <transform xil_pn:end_ts="1417642492" xil_pn:name="TRAN_compileBCD2" xil_pn:prop_ck="8767976346290770651" xil_pn:start_ts="1417642492">
+      <status xil_pn:value="SuccessfullyRun"/>
+      <status xil_pn:value="ReadyToRun"/>
+      <status xil_pn:value="OutOfDateForProperties"/>
+    </transform>
+  </transforms>
+
+</generated_project>
