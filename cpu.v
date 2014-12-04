@@ -1,9 +1,5 @@
 module CPU(clk); 
   input clk;
-  // Clock
-  // reg clk;
-  // initial clk=1;
-  // always #100 clk = !clk;
 
   // Answer
   wire[31:0] answer;
@@ -37,7 +33,6 @@ module CPU(clk);
   wire[31:0] Dw;
   wire[31:0] Da, Db;
   wire[31:0] Dout;
-  wire[31:0] DMAddr;
 
   // Lag buffers
   reg[31:0] PCBuff;
@@ -66,7 +61,7 @@ module CPU(clk);
 
   regfile RegFile (Da, Db, Dw, rs, rt, Aw, RegWr, clk, answer); 
   ALU ALU (ALUout, ALUcarryout, ALUzero, ALUoverflow, Da, ALUopB, ALUcntrl, clk);
-  DataMemory DataMem (clk, MemWr, DMAddr, Db, Dout);
+  DataMemory DataMem (clk, MemWr, ALUout, Db, Dout);
   IFU IFU (clk, Jump, TargetInstr, JumpReg, ALUout, Branch, imm16, ALUzero, InvZero, PC, Instruction);
   InstructionDecoder InstrDec (clk, Instruction, ExtendMethod, RegDst, RegWr, ALUsrc, Branch, Jump, ALUcntrl, MemWr, MemToReg, JumpReg, InvZero);
 
