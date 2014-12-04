@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <report-views version="2.0" >
  <header>
-  <DateModified>2014-12-04T17:03:17</DateModified>
+  <DateModified>2014-12-04T17:11:48</DateModified>
   <ModuleName>CPU_bringup</ModuleName>
   <SummaryTimeStamp>2014-12-04T16:55:39</SummaryTimeStamp>
   <SavedFilePath>/home/jkingery/.wine/drive_c/CompArch/MP3/xilinx/CPU/iseconfig/CPU.xreport</SavedFilePath>
