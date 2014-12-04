@@ -77,7 +77,7 @@ wire [32:0] carry;
 wire [31:0] Bin;
 generate 
 genvar index;
-    for (index = 0; index<32; index = index + 1) begin
+    for (index = 0; index<32; index = index + 1) begin : FULL_ADDER_BLOCK 
     `XORGATE xor2 (Bin[index], B[index], invertB);
     fullAdder faddr1 (res[index], carry[index+1], A[index], Bin[index], carry[index]);
 end
@@ -101,7 +101,7 @@ wire [31:0] tmp;
 
 generate
 genvar index;
-    for (index = 0; index<32; index = index + 1) begin
+    for (index = 0; index<32; index = index + 1) begin : ADD_INVERT_OUTPUT_BLOCK
     `NANDGATE nand1 (tmp[index], A[index], B[index]);
     `XORGATE xor1 (res[index], tmp[index], invOut);
 end
@@ -123,7 +123,7 @@ input ovfl_res;
 // Left pad result with 31 0s to end up with 32 bit number
 generate
 genvar index;
-    for (index = 1; index<32; index = index + 1) begin
+    for (index = 1; index<32; index = index + 1) begin : LEFT_PAD_BLOCK
     `BUFGATE buf1 (res[index], 0);
 end
 endgenerate
@@ -140,7 +140,7 @@ wire [31:0] tmp;
 
 generate
 genvar index;
-    for (index = 0; index<32; index = index + 1) begin
+    for (index = 0; index<32; index = index + 1) begin : NOR_INVERT_OUTPUT_BLOCK
     `NORGATE nor1 (tmp[index], A[index], B[index]);
     `XORGATE xor1 (res[index], tmp[index], invOut);
 end
@@ -155,7 +155,7 @@ input[31:0] B;
 
 generate
 genvar index;
-    for (index = 0; index<32; index = index + 1) begin
+    for (index = 0; index<32; index = index + 1) begin : XOR_BLOCK
     `XORGATE xor1 (res[index], A[index], B[index]);
 end
 endgenerate
@@ -196,7 +196,7 @@ nand_op nand_op1 (nand_res, operandA, operandB, invOut);
 wire [2:0] naddr;
 generate
 genvar index;
-    for (index = 0; index<3; index = index + 1) begin
+    for (index = 0; index<3; index = index + 1) begin : INVERT_ADDRESS_BLOCK
     `NOTGATE not1 (naddr[index], addr[index]);
 end
 endgenerate
@@ -210,7 +210,7 @@ wire [31:0] nand_out;
 wire [31:0] nresult;
 generate
 genvar ind;
-    for (ind=0; ind<32; ind=ind+1) begin
+    for (ind=0; ind<32; ind=ind+1) begin : SELECT_OUTPUT_BLOCK
     `ANDGATE andadd (add_out[ind], naddr[0],naddr[1],naddr[2],add_res[ind]);
     `ANDGATE andxor (xor_out[ind], addr[0],naddr[1],naddr[2],xor_res[ind]);
     `ANDGATE andslt (slt_out[ind], naddr[0],addr[1],naddr[2],slt_res[ind]);
@@ -230,7 +230,7 @@ wire [32:0] zerochain;
 `BUFGATE buf3 (zerochain[0], 1);
 generate
     genvar i;
-    for (i=0; i<32; i=i+1) begin
+    for (i=0; i<32; i=i+1) begin : ZEROCHAIN_BLOCK
     `ANDGATE zeroand (zerochain[i+1], nresult[i], zerochain[i]);
 end
 endgenerate
