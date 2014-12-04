@@ -37,10 +37,10 @@
 `define SLT 3'd3
 
 
-module InstructionDecoder(instruction, ExtendMethod, RegDst, RegWr, ALUsrc, Branch, Jump, ALUcntrl, MemWr, MemToReg, JumpReg, InvZero);
+module InstructionDecoder(clk, instruction, ExtendMethod, RegDst, RegWr, ALUsrc, Branch, Jump, ALUcntrl, MemWr, MemToReg, JumpReg, InvZero);
 // Look up table that takes a 32 bit instruction word and sets all the neccissary control
 // flags to make the processor preform the correct computation.
-
+input clk;
 // 32 bit hex code defining which operation we will preform.
 input[31:0] instruction;
 
@@ -61,42 +61,54 @@ output reg JumpReg; // Jump Register. Not sure what this one is for.
 output reg InvZero;
 
 
-reg[5:0] op_code; // should get optimized away
+// reg[5:0] op_code; // should get optimized away
+wire[5:0] op_code;
+assign op_code = instruction[31:26];
+
+wire[5:0] funct = instruction[5:0];
+
 
 always @(instruction) begin
-op_code = instruction[31:26];
-case (op_code)
-	`OPCODE_addiu: begin RegDst = `RT; ExtendMethod = 1; RegWr = 0; ALUsrc = `immediate; Branch = 0; Jump = 0; 
-		ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end
-	`OPCODE_jal: begin RegDst = 0; ExtendMethod = 0; RegWr = 1; ALUsrc = `PC; Branch = 0; Jump = 1; 
-		ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
-	`OPCODE_addu: begin RegDst = `RD; ExtendMethod = 0; RegWr = 1; ALUsrc = `Db; Branch = 0; Jump = 0; 
-		ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
-	`OPCODE_add: begin RegDst = `RD; ExtendMethod = 0; RegWr = 1; ALUsrc = `Db; Branch = 0; Jump = 0; 
-		ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
-	`OPCODE_addi: begin RegDst = `RT; ExtendMethod = 0; RegWr = 1; ALUsrc = `immediate; Branch = 0; Jump = 0; 
-		ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
-	`OPCODE_slt: begin RegDst = `RD; ExtendMethod = 0; RegWr = 0; ALUsrc = `Db; Branch = 0; Jump = 0; 
-		ALUcntrl = `SLT; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
-	`OPCODE_bne: begin RegDst = `RT; ExtendMethod = 0; RegWr = 0; ALUsrc = `immediate; Branch = 1; Jump = 0; 
-		ALUcntrl = `SUB; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 1; end	
-	`OPCODE_beq: begin RegDst = `RT; ExtendMethod = 0; RegWr = 0; ALUsrc = `immediate; Branch = 1; Jump = 0; 
-		ALUcntrl = `SUB; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
-	`OPCODE_jr: begin RegDst = `RD; ExtendMethod = 0; RegWr = 0; ALUsrc = `Db; Branch = 0; Jump = 0; 
-		ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 1; InvZero = 0; end	
-	`OPCODE_sw: begin RegDst = `RT; ExtendMethod = 0; RegWr = 0; ALUsrc = `immediate; Branch = 0; Jump = 0; 
-		ALUcntrl = `ADD; MemWr = 1; MemToReg = 0; JumpReg = 0; InvZero = 0; end	
-	`OPCODE_lw: begin RegDst = `RT; ExtendMethod = 0; RegWr = 1; ALUsrc = `immediate; Branch = 0; Jump = 0; 
-		ALUcntrl = `ADD; MemWr = 0; MemToReg = 1; JumpReg = 0; InvZero = 0; end	
-	
-	
-	default: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
-		ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end
-	// helps make sure every case is represented, so that the synthesiser 
-	// can optimize away all the registers. (all outputs were declared as reg). 
-	// apparently the synthesiser can't get rid of them if one of my cases is incomplete.
-	// default case should never be used.
-endcase
+  // op_code = instruction[31:26];
+  case (op_code)
+    0: begin
+      case (funct)
+        `OPCODE_addu: begin RegDst = `RD; ExtendMethod = 0; RegWr = 1; ALUsrc = `Db; Branch = 0; Jump = 0; 
+          ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end 
+        `OPCODE_add: begin RegDst = `RD; ExtendMethod = 0; RegWr = 1; ALUsrc = `Db; Branch = 0; Jump = 0; 
+          ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end 
+        `OPCODE_slt: begin RegDst = `RD; ExtendMethod = 0; RegWr = 0; ALUsrc = `Db; Branch = 0; Jump = 0; 
+          ALUcntrl = `SLT; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end 
+        `OPCODE_jr: begin RegDst = `RD; ExtendMethod = 0; RegWr = 0; ALUsrc = `Db; Branch = 0; Jump = 0; 
+          ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 1; InvZero = 0; end 
+        
+        default: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
+        ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end
+      endcase
+    end
+    `OPCODE_addiu: begin RegDst = `RT; ExtendMethod = 1; RegWr = 0; ALUsrc = `immediate; Branch = 0; Jump = 0; 
+      ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end
+    `OPCODE_jal: begin RegDst = 0; ExtendMethod = 0; RegWr = 1; ALUsrc = `PC; Branch = 0; Jump = 1; 
+      ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end 
+    `OPCODE_addi: begin RegDst = `RT; ExtendMethod = 0; RegWr = 1; ALUsrc = `immediate; Branch = 0; Jump = 0; 
+      ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end 
+    `OPCODE_bne: begin RegDst = `RT; ExtendMethod = 0; RegWr = 0; ALUsrc = `immediate; Branch = 1; Jump = 0; 
+      ALUcntrl = `SUB; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 1; end 
+    `OPCODE_beq: begin RegDst = `RT; ExtendMethod = 0; RegWr = 0; ALUsrc = `immediate; Branch = 1; Jump = 0; 
+      ALUcntrl = `SUB; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end 
+    `OPCODE_sw: begin RegDst = `RT; ExtendMethod = 0; RegWr = 0; ALUsrc = `immediate; Branch = 0; Jump = 0; 
+      ALUcntrl = `ADD; MemWr = 1; MemToReg = 0; JumpReg = 0; InvZero = 0; end 
+    `OPCODE_lw: begin RegDst = `RT; ExtendMethod = 0; RegWr = 1; ALUsrc = `immediate; Branch = 0; Jump = 0; 
+      ALUcntrl = `ADD; MemWr = 0; MemToReg = 1; JumpReg = 0; InvZero = 0; end 
+    
+    
+    default: begin RegDst = 0; ExtendMethod = 0; RegWr = 0; ALUsrc = 0; Branch = 0; Jump = 0; 
+      ALUcntrl = 0; MemWr = 0; MemToReg = 0; JumpReg = 0; InvZero = 0; end
+    // helps make sure every case is represented, so that the synthesiser 
+    // can optimize away all the registers. (all outputs were declared as reg). 
+    // apparently the synthesiser can't get rid of them if one of my cases is incomplete.
+    // default case should never be used.
+  endcase
 end // end always block
 endmodule 
 
