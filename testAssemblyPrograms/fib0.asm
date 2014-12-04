@@ -2,14 +2,9 @@
 li $sp, 0x3ffc
 
 ##find 4th fibonacci number
-li $a0, 4
+li $a0, 0
 jal fibonacci
 move $v1, $v0
-
-#find 10th fibonacci number
-li $a0, 10
-jal fibonacci
-add $v1, $v1, $v0
 
 #exit
 li $t1, 1
