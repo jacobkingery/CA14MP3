@@ -6,7 +6,6 @@ module InstructionMemory(clk, Addr, DataOut);
  
   reg [31:0] mem[1023:0];
   initial $readmemh("program_hex.dat", mem);
-  // initial $readmemh("testAssemblyPrograms/fib4.dat", mem);
 
   // assign DataOut = mem[Addr];
   always @(posedge clk) begin
@@ -78,7 +77,7 @@ initial imm16=2; // from opcode
 reg Zero;
 initial Zero=0; // from ALU
 reg[31:0] JumpTo;
-initial JumpTo=0; // a multiple of 4, from $ra
+initial JumpTo=0; // from $ra
 
 IFU instrFetch (clk, Jump, TargetInstr, JumpReg, JumpTo, Branch, imm16, Zero, InvZero, PC, Instruction);
 
@@ -97,12 +96,12 @@ initial begin
   Jump=0;
   #200
   JumpReg=1;
-  JumpTo=4;
+  JumpTo=0;
   #200
   JumpReg=0;
   #200
   JumpReg=1;
-  JumpTo=8;
+  JumpTo=1;
   #200
   JumpReg=0;
   #200

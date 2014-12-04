@@ -9,7 +9,7 @@ module CPU(clk);
   wire[31:0] answer;
 
   // Control flags
-  wire ExtendMethod, RegWr, Branch, Jump, MemWr, MemToReg, JumpReg, InvZero, DMAddrsrc;
+  wire ExtendMethod, RegWr, Branch, Jump, MemWr, MemToReg, JumpReg, InvZero;
   wire[1:0] ALUsrc, RegDst; 
   wire[2:0] ALUcntrl; 
 
@@ -39,10 +39,8 @@ module CPU(clk);
   wire[31:0] Dout;
   wire[31:0] DMAddr;
 
-  // Lab buffers
+  // Lag buffers
   reg[31:0] PCBuff;
-  reg[31:0] ALUoutBuff;
-  reg ZBuff;
 
   // Instruction breakdown
   assign rs = Instruction[25:21];
@@ -59,9 +57,6 @@ module CPU(clk);
   // ALU sourceB
   Mux3to1 ALUsrcBMux (ALUopB, ALUsrc, imm32, PCBuff, Db);
 
-  // DataMem Addr
-  Mux2to1 DataMemAddrMux (DMAddr, DMAddrsrc, ALUout, ALUoutBuff);
-
   // Register file write address
   Mux3to1 #(5) AwMux (Aw, RegDst, rt, rd, 5'd31);
 
@@ -73,12 +68,10 @@ module CPU(clk);
   ALU ALU (ALUout, ALUcarryout, ALUzero, ALUoverflow, Da, ALUopB, ALUcntrl, clk);
   DataMemory DataMem (clk, MemWr, DMAddr, Db, Dout);
   IFU IFU (clk, Jump, TargetInstr, JumpReg, ALUout, Branch, imm16, ALUzero, InvZero, PC, Instruction);
-  InstructionDecoder InstrDec (clk, Instruction, ExtendMethod, RegDst, RegWr, ALUsrc, Branch, Jump, ALUcntrl, MemWr, MemToReg, DMAddrsrc, JumpReg, InvZero);
+  InstructionDecoder InstrDec (clk, Instruction, ExtendMethod, RegDst, RegWr, ALUsrc, Branch, Jump, ALUcntrl, MemWr, MemToReg, JumpReg, InvZero);
 
   always @(posedge clk) begin
     PCBuff <= PC32;
-    ALUoutBuff <= ALUout;
-    ZBuff <= ALUzero;
   end
 
 endmodule

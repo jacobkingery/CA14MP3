@@ -2,7 +2,6 @@ module DataMemory(clk, regWE, Addr, DataIn, DataOut);
   input clk, regWE;
   input[31:0] Addr;
   input[31:0] DataIn;
-  // output reg[31:0] DataOut;
   output[31:0] DataOut;
 
   wire[31:0] OffsetAddr;
@@ -12,11 +11,11 @@ module DataMemory(clk, regWE, Addr, DataIn, DataOut);
   always @(posedge clk) begin
     if (regWE)
       mem[OffsetAddr] <= DataIn;
-    // DataOut <= mem[OffsetAddr];
   end
   assign DataOut = mem[OffsetAddr];
-  wire[31:0] mem0, mem1, mem2, mem3, mem4, mem5, mem6;
-  
+
+  // For looking into the memory, will be optimized out in synthesis
+  wire[31:0] mem0, mem1, mem2, mem3, mem4, mem5, mem6;  
   assign mem0 = mem[1023];
   assign mem1 = mem[1022];
   assign mem2 = mem[1021];
