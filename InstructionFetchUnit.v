@@ -2,10 +2,13 @@ module InstructionMemory(clk, Addr, DataOut);
   input clk;
   input[29:0] Addr;
   output reg[31:0] DataOut;
+  // output[31:0] DataOut;
  
   reg [31:0] mem[1023:0];
   initial $readmemh("program_hex.dat", mem);
+  // initial $readmemh("testAssemblyPrograms/fib4.dat", mem);
 
+  // assign DataOut = mem[Addr];
   always @(posedge clk) begin
     DataOut <= mem[Addr];
   end
@@ -27,6 +30,8 @@ assign PCout = PC;
 
 InstructionMemory instrMem (clk, PC, Instruction);
 
+wire Z;
+assign Z = (Zero ^ InvZero);
 always @(negedge clk) begin
   if (Jump) begin
     // jump to given target, assuming same first 4 bits

@@ -80,7 +80,7 @@ always @(instruction) begin
           ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; DMAddrsrc = 0; JumpReg = 0; InvZero = 0; end 
         `OPCODE_add: begin RegDst = `RD; ExtendMethod = 0; RegWr = 1; ALUsrc = `Db; Branch = 0; Jump = 0; 
           ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; DMAddrsrc = 0; JumpReg = 0; InvZero = 0; end 
-        `OPCODE_slt: begin RegDst = `RD; ExtendMethod = 0; RegWr = 0; ALUsrc = `Db; Branch = 0; Jump = 0; 
+        `OPCODE_slt: begin RegDst = `RD; ExtendMethod = 0; RegWr = 1; ALUsrc = `Db; Branch = 0; Jump = 0; 
           ALUcntrl = `SLT; MemWr = 0; MemToReg = 0; DMAddrsrc = 0; JumpReg = 0; InvZero = 0; end 
         `OPCODE_jr: begin RegDst = `RD; ExtendMethod = 0; RegWr = 0; ALUsrc = `Db; Branch = 0; Jump = 0; 
           ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; DMAddrsrc = 0; JumpReg = 1; InvZero = 0; end 
@@ -95,9 +95,9 @@ always @(instruction) begin
       ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; DMAddrsrc = 0; JumpReg = 0; InvZero = 0; end 
     `OPCODE_addi: begin RegDst = `RT; ExtendMethod = 0; RegWr = 1; ALUsrc = `immediate; Branch = 0; Jump = 0; 
       ALUcntrl = `ADD; MemWr = 0; MemToReg = 0; DMAddrsrc = 0; JumpReg = 0; InvZero = 0; end 
-    `OPCODE_bne: begin RegDst = `RT; ExtendMethod = 0; RegWr = 0; ALUsrc = `immediate; Branch = 1; Jump = 0; 
+    `OPCODE_bne: begin RegDst = `RT; ExtendMethod = 0; RegWr = 0; ALUsrc = `Db; Branch = 1; Jump = 0; 
       ALUcntrl = `SUB; MemWr = 0; MemToReg = 0; DMAddrsrc = 0; JumpReg = 0; InvZero = 1; end 
-    `OPCODE_beq: begin RegDst = `RT; ExtendMethod = 0; RegWr = 0; ALUsrc = `immediate; Branch = 1; Jump = 0; 
+    `OPCODE_beq: begin RegDst = `RT; ExtendMethod = 0; RegWr = 0; ALUsrc = `Db; Branch = 1; Jump = 0; 
       ALUcntrl = `SUB; MemWr = 0; MemToReg = 0; DMAddrsrc = 0; JumpReg = 0; InvZero = 0; end 
     `OPCODE_sw: begin RegDst = `RT; ExtendMethod = 0; RegWr = 0; ALUsrc = `immediate; Branch = 0; Jump = 0; 
       ALUcntrl = `ADD; MemWr = 1; MemToReg = 0; DMAddrsrc = `ALUout; JumpReg = 0; InvZero = 0; end 

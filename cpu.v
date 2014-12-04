@@ -1,9 +1,9 @@
-module CPU;
-
+module CPU(clk); 
+  input clk;
   // Clock
-  reg clk;
-  initial clk=1;
-  always #100 clk = !clk;
+  // reg clk;
+  // initial clk=1;
+  // always #100 clk = !clk;
 
   // Answer
   wire[31:0] answer;
@@ -72,7 +72,7 @@ module CPU;
   regfile RegFile (Da, Db, Dw, rs, rt, Aw, RegWr, clk, answer); 
   ALU ALU (ALUout, ALUcarryout, ALUzero, ALUoverflow, Da, ALUopB, ALUcntrl, clk);
   DataMemory DataMem (clk, MemWr, DMAddr, Db, Dout);
-  IFU IFU (clk, Jump, TargetInstr, JumpReg, ALUout, Branch, imm16, ZBuff, InvZero, PC, Instruction);
+  IFU IFU (clk, Jump, TargetInstr, JumpReg, ALUout, Branch, imm16, ALUzero, InvZero, PC, Instruction);
   InstructionDecoder InstrDec (clk, Instruction, ExtendMethod, RegDst, RegWr, ALUsrc, Branch, Jump, ALUcntrl, MemWr, MemToReg, DMAddrsrc, JumpReg, InvZero);
 
   always @(posedge clk) begin
@@ -80,5 +80,15 @@ module CPU;
     ALUoutBuff <= ALUout;
     ZBuff <= ALUzero;
   end
+
+endmodule
+
+module testCPU;
+  // Clock
+  reg clk;
+  initial clk=1;
+  always #100 clk = !clk;
+
+  CPU CPU (clk);
 
 endmodule

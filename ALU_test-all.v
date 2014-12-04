@@ -75,7 +75,7 @@ wire [32:0] carry;
 `BUFGATE buf1 (carry[0], Cin);
 
 wire [31:0] Bin;
-generate
+generate 
 genvar index;
     for (index = 0; index<32; index = index + 1) begin
     `XORGATE xor2 (Bin[index], B[index], invertB);
