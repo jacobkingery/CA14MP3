@@ -12,8 +12,10 @@ jal fibonacci
 add $v1, $v1, $v0
 
 #exit
-li $v0, 10
-syscall
+li $t0, 1
+jal endall
+#li $v0, 10
+#syscall
 
 
 fibonacci:
@@ -60,3 +62,6 @@ add $sp, $sp, 12
 #adding fibonacci(x-1) and fibonacci(x-2)
 add $v0, $v0, $t0
 jr $ra
+
+endall:
+jal endall
