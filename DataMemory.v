@@ -24,3 +24,39 @@ module DataMemory(clk, regWE, Addr, DataIn, DataOut);
   assign mem5 = mem[1018];
   assign mem6 = mem[1017];
 endmodule
+
+module DataMemoryTestBench;
+reg clk;
+reg regWE;
+reg [31:0] Addr;
+reg [31:0] DataIn;
+wire [31:0] DataOut;
+
+initial clk=1;
+always #100 clk = !clk;
+
+DataMemory datamem (clk, regWE, Addr, DataIn, DataOut);
+
+initial begin
+  
+  $display("write to first address, read from same address");
+  regWE = 1; Addr = 32'd111; DataIn = 32'b00001110101010101010101010101010; #100
+  regWE = 0; #100
+  $display("Read                 | Actual");
+  $display("%b | 00001110101010101010101010101010", DataOut);
+
+  $display("write to new address, read from new address");
+  regWE = 1; Addr = 32'd222; DataIn = 32'b10000000000000000000000000000001; #100
+  regWE = 0; #100
+  $display("Read                 | Actual");
+  $display("%b | 10000000000000000000000000000001", DataOut);
+
+  $display("read from first address");
+  Addr = 32'd111; #100
+  $display("Read                 | Actual");
+  $display("%b | 00001110101010101010101010101010", DataOut);
+
+
+end
+
+endmodule
